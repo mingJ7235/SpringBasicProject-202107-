@@ -1,25 +1,30 @@
 package hello.hellospring;
 
-import hello.hellospring.repository.JdbcMemberRepository;
-import hello.hellospring.repository.JdbcTemplateMemberRepository;
-import hello.hellospring.repository.MemberRepository;
-import hello.hellospring.repository.MemoryMemberRepository;
+import hello.hellospring.repository.*;
 import hello.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 @Configuration
 public class SpringConfig {
 
-    private DataSource dataSource;//properties를 보고 bean으로 설정해준다.
+    private EntityManager em;
 
     @Autowired
-    public SpringConfig(DataSource dataSource) { //생성자로 DI 주입 !
-        this.dataSource = dataSource;
+    public SpringConfig(EntityManager em) {
+        this.em = em;
     }
+
+    //    private DataSource dataSource;//properties를 보고 bean으로 설정해준다.
+//
+//    @Autowired
+//    public SpringConfig(DataSource dataSource) { //생성자로 DI 주입 !
+//        this.dataSource = dataSource;
+//    }
 
     //직접 자바코드로 스프링 빈 등록하기
     @Bean
@@ -34,6 +39,7 @@ public class SpringConfig {
     public MemberRepository memberRepository() {
         //return new MemoryMemberRepository();
         //return new JdbcMemberRepository(dataSource);
-        return new JdbcTemplateMemberRepository(dataSource);
+        //return new JdbcTemplateMemberRepository(dataSource);
+        return new JpaMemberRepository(em);
     }
 }
