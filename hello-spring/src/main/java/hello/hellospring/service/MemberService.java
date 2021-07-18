@@ -25,11 +25,10 @@ public class MemberService {
      * @return
      */
     public Long join (Member member) {
+            validateDuplicateMember(member);  //같은 이름의 중복 회원 X
+            memberRepository.save(member);
+            return member.getId();
 
-        validateDuplicateMember(member);  //같은 이름의 중복 회원 X
-
-        memberRepository.save(member);
-        return member.getId();
     }
 
     private void validateDuplicateMember(Member member) {
@@ -44,7 +43,7 @@ public class MemberService {
      * @return
      */
     public List<Member> findMembers () {
-        return memberRepository.findAll();
+            return memberRepository.findAll();
     }
 
     public Optional<Member> findeOne (Long memberId) {

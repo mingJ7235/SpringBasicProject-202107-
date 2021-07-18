@@ -1,5 +1,6 @@
 package hello.hellospring;
 
+import hello.hellospring.aop.TimeTraceAop;
 import hello.hellospring.repository.*;
 import hello.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,19 @@ import javax.sql.DataSource;
 @Configuration
 public class SpringConfig {
 
-    private EntityManager em;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public SpringConfig(EntityManager em) {
-        this.em = em;
+    public SpringConfig(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
+
+    //    private EntityManager em;
+//
+//    @Autowired
+//    public SpringConfig(EntityManager em) {
+//        this.em = em;
+//    }
 
     //    private DataSource dataSource;//properties를 보고 bean으로 설정해준다.
 //
@@ -29,17 +37,24 @@ public class SpringConfig {
     //직접 자바코드로 스프링 빈 등록하기
     @Bean
     public MemberService memberService () {
-        return new MemberService(memberRepository());
+        return new MemberService(memberRepository);
     }
 
     //개방 폐쇄원칙에 철저하다.. !! OCP !
 
     //조립하기
-    @Bean
-    public MemberRepository memberRepository() {
-        //return new MemoryMemberRepository();
-        //return new JdbcMemberRepository(dataSource);
-        //return new JdbcTemplateMemberRepository(dataSource);
-        return new JpaMemberRepository(em);
-    }
+//    @Bean
+//    public MemberRepository memberRepository() {
+//        //return new MemoryMemberRepository();
+//        //return new JdbcMemberRepository(dataSource);
+//        //return new JdbcTemplateMemberRepository(dataSource);
+////        return new JpaMemberRepository(em);
+//
+//    }
+
+    //AOP bean으로 등록하기
+//    @Bean
+//    public TimeTraceAop timeTraceAop () {
+//        return new TimeTraceAop();
+//    }
 }
